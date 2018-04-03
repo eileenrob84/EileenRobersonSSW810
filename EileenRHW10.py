@@ -180,7 +180,38 @@ class Instructor:
             if inst_id.strip() == l.cwid: 
                 return l
 
+class Majors:
+    ''' get the list of required and elective courses from a file
+        and prints them in a table'''
+    def __init__(self,major, option, class_id):
+        '''initialize the Student attributes'''
+        self.major = major
+        self.option = option
+        self.class_id = class_id    
 
+    def get_majors(fn):
+        '''get the data from the student file and put into the student 
+            attributes
+            '''
+        file_name1 = fn
+        classes = []
+        #pt1 = PrettyTable(field_names=['CWID', 'Name', 'Major'])
+
+        try:
+            fp = open(file_name1, 'r')
+        except FileNotFoundError:
+            print("Can't open", file_name1)
+        else:
+            with fp:
+
+                for line in fp:
+                    major, option, class_ids = line.split('\t')
+                    class_list = Majors(major, option, class_ids)
+                    classes.append(class_list)
+        return (classes)
+            
+            
+            
 
 
 def main():
