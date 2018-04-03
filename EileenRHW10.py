@@ -40,7 +40,6 @@ class Student:
             '''
         file_name1 = fn
         students = []
-        #pt1 = PrettyTable(field_names=['CWID', 'Name', 'Major'])
 
         try:
             fp = open(file_name1, 'r')
