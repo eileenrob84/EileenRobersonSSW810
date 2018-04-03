@@ -40,6 +40,7 @@ class Student:
             '''
         file_name1 = fn
         students = []
+        #pt1 = PrettyTable(field_names=['CWID', 'Name', 'Major'])
 
         try:
             fp = open(file_name1, 'r')
@@ -179,43 +180,55 @@ class Instructor:
             if inst_id.strip() == l.cwid: 
                 return l
 
+
 class Majors:
     ''' get the list of required and elective courses from a file
         and prints them in a table'''
-    def __init__(self,major, option, class_id):
+    def __init__(self, major_id, option, class_id, req_classes=None, elect_classes=None):
         '''initialize the Student attributes'''
-        self.major = major
+        self.major_id = major_id
         self.option = option
-        self.class_id = class_id    
+        self.class_id = class_id
+        self.req_classes = req_classes
+        self.elect_classes = elect_classes
+
 
     def get_majors(fn):
         '''get the data from the student file and put into the student 
             attributes
             '''
-        file_name1 = fn
-        classes = []
-        #pt1 = PrettyTable(field_names=['CWID', 'Name', 'Major'])
+        file_name4 = fn
+        majors = []
 
         try:
-            fp = open(file_name1, 'r')
+            fp = open(file_name4, 'r')
         except FileNotFoundError:
-            print("Can't open", file_name1)
+            print("Can't open", file_name4)
         else:
             with fp:
 
                 for line in fp:
-                    major, option, class_ids = line.split('\t')
-                    class_list = Majors(major, option, class_ids)
-                    classes.append(class_list)
-        return (classes)
-            
-            
-            
+                    major_id, option, class_ids = line.split('\t')
+                    major = Majors(major_id, option, class_ids)
+                    majors.append(major)
+
+                for m in majors:
+                    if m.option == 'R':
+                        req_classes.append(m.major_id)
+                    else:
+                        elect_classes.append(m.major_id)
+ 
+        return (majors)
+
+
+
+
+
 
 
 def main():
     student_data = Student.get_data("students.txt")
-    #print(student_data)
+
     '''for s in student_data:
         print(str(s))'''
 
@@ -244,7 +257,18 @@ def main():
         instructor_pt.add_row([instructor.cwid, instructor.name, instructor.dept, c.course_id, len(c.students)])        
     print(instructor_pt)
 
+
+    majors_pt = PrettyTable
+    majors_pt = PrettyTable(field_names=['Dept', 'Required', 'Electives'])
+    majors_data = Majors.get_majors("majors.txt")
+    for m in majors_data:
+        major_list = m.class_id.sort()
+        majors_pt.add_row(major_id, m.req_classes, m.elect_classes)
+    print(majors_pt)
+
 if __name__ == "__main__":
     main()
+
+
 
 
